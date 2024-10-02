@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">C++ search 函数 | Dynamic_Pigeon</title>
+  <title itemprop="name">2022 ICPC 杭州区域赛 K 题题解 | Dynamic_Pigeon</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -305,11 +305,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://s3.bmp.ovh/imgs/2024/10/01/d254935c80511b82.png);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://s3.bmp.ovh/imgs/2024/10/01/d254935c80511b82.png">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(http://cdnjson.com/images/2024/10/01/81197b85969320adbdf325c260404543.png);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="http://cdnjson.com/images/2024/10/01/81197b85969320adbdf325c260404543.png">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      C++ search 函数</h1>
+      2022 ICPC 杭州区域赛 K 题题解</h1>
       <p class="entry-census">
         <span>
           <a href="chy669086.github.io">
@@ -321,7 +321,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2024-10-1<span class="bull">
+        2024-10-2<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -335,96 +335,163 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h1 id="C-search-函数"><a href="#C-search-函数" class="headerlink" title="C++ search 函数"></a>C++ search 函数</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>std::search 函数在 C++ 很早的版本就开始存在了，但是在 C++17 中添加了一些重载和辅助类，这大大提高了这个函数的使用价值。这篇文章主要来介绍下面这个重载。</p>
-<pre><code class="c++">template&lt; class ForwardIt, class Searcher &gt;
-ForwardIt search( ForwardIt first, ForwardIt last,
-                  const Searcher&amp; searcher );
+          <h1 id="2022-ICPC-杭州区域赛-K-题题解"><a href="#2022-ICPC-杭州区域赛-K-题题解" class="headerlink" title="2022 ICPC 杭州区域赛 K 题题解"></a>2022 ICPC 杭州区域赛 K 题题解</h1><h2 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h2><p>给你 $n$ 个字符串，然后有 $q$ 次询问，每次询问给出一个字典序，请你输出在这个字典序下的逆序对个数。</p>
+<h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>首先考虑暴力，每次询问可以 $O(|S|\log(n))$ 处理，显然会超时。</p>
+<p>考虑优化，注意到两个字符串比较出结果一定是在某个位置发生的（称这个比出大小的比较为<strong>决定性比较</strong>），这两个字符串一定有一个相同的前缀（长度可能是 0）。那么可以把问题转换成判断某个字符和其他字符发生了几次<strong>决定性</strong>的的比较，那么对于每次询问我们和 $O(26 \times 26)$ 处理。</p>
+<p>如何找到发生了几次决定性的比较呢，注意前面的一个性质，决定性比较之前的两个字符串一定是同前缀，这正好撞上了字典树的性质：相同前缀共用一条链。</p>
+<p>我们只要统计每个节点的后继节点字符总数，就可以对每一个新插入的字符串进行决定性比较的统计。对于 <code>a</code> 和 <code>aa</code> 这种串，我们可以简单在每个串后面加一个字符，并人为将这个字符的字典序设置为最小</p>
+<pre><code class="c++">// 字段树节点
+struct node &#123;
+  // 后继节点位置
+  std::array&lt;int, 27&gt; nxt;
+  // 后继节点个数统计
+  std::array&lt;int, 27&gt; sum;
+  node() &#123;
+    std::fill(all(nxt), -1);
+    std::fill(all(sum), 0);
+  &#125;
+&#125;;
+
+// 决定性比较次数统计
+int cnt[27][27];
+
+struct Trie &#123;
+  std::vector&lt;node&gt; nodes;
+  int root = 0;
+  Trie() &#123;
+    nodes.emplace_back();
+  &#125;
+
+  void insert(const std::string &amp;s) &#123;
+    int cur = root;
+    for (char c : s) &#123;
+      if (nodes[cur].nxt[c - &#39;a&#39;] == -1) &#123;
+        nodes[cur].nxt[c - &#39;a&#39;] = nodes.size();
+        nodes.emplace_back();
+      &#125;
+      // 统计这个串的这个位置决定性比较次数
+      for (int i = 0; i &lt; 27; i++) &#123;
+        cnt[c - &#39;a&#39;][i] += nodes[cur].sum[i];
+      &#125;
+      // 后继节点计数加一
+      nodes[cur].sum[c - &#39;a&#39;]++;
+      cur = nodes[cur].nxt[c - &#39;a&#39;];
+    &#125;
+  &#125;
+&#125;;
 </code></pre>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>元素名称</strong></td>
-<td><strong>元素意义</strong></td>
-</tr>
-<tr>
-<td>first, last</td>
-<td>要检验的元素范围 —— 一般是迭代器</td>
-</tr>
-<tr>
-<td>searcher</td>
-<td>封装搜索算法和搜索模式的搜索器</td>
-</tr>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>这是从 C++17 开始给 std::search 添加的函数重载，Searcher 是搜索器，接下来就是这个函数最有用的地方了，C++ std 提供了三种搜索器：</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>default_searcher (C++17)</td>
-<td>标准 C++ 库搜索算法实现</td>
-</tr>
-<tr>
-<td>boyer_moore_searcher (C++17)</td>
-<td>Boyer-Moore 搜索算法实现</td>
-</tr>
-<tr>
-<td>boyer_moore_horspool_searcher (C++17)</td>
-<td>Boyer-Moore-Horspool 搜索算法实现</td>
-</tr>
-</tbody>
-</table>
-<p>注意到标准库提供了 BM 算法的搜索器，BM 算法一直被称为最快的字符串搜索算法，在实际表现中一般比 KMP 快 2～3 倍（暴力算法在大部分时候其实表现也比 KMP 好）。但是由于 BM 算法的最坏时间复杂度是 $O(nm)$，所以不建议在算法竞赛中使用，但是在生产环境中，BM 算法无疑是最佳选择。</p>
-<h2 id="使用举例"><a href="#使用举例" class="headerlink" title="使用举例"></a>使用举例</h2><pre><code class="c++">#include &lt;functional&gt;
+<p>全部代码</p>
+<pre><code class="c++">#include &lt;algorithm&gt;
+#include &lt;array&gt;
+#include &lt;cassert&gt;
+#include &lt;cctype&gt;
+#include &lt;cmath&gt;
+#include &lt;cstdint&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
 #include &lt;iostream&gt;
+#include &lt;ostream&gt;
 #include &lt;string&gt;
+#include &lt;vector&gt;
 
-int main() &#123;
-  std::string s = &quot;never&quot;;
-  // 用 s 创建一个搜索器
-  std::boyer_moore_searcher searcher(s.begin(), s.end());
+#ifdef DYNAMIC_PIGEON
+#include &quot;algo/debug.h&quot;
+#else
+#define debug(...) 114514
+#endif
 
-  std::string text = &quot;never say never&quot;;
-  // 在 text 中搜索 s
-  auto result = std::search(text.begin(), text.end(), searcher);
-  if (result != text.end()) &#123;
-    std::cout &lt;&lt; &quot;The text contains the substring \&quot;never\&quot; at position &quot;
-              &lt;&lt; result - text.begin() &lt;&lt; &#39;\n&#39;;
-  &#125; else &#123;
-    std::cout &lt;&lt; &quot;The text does not contain the substring \&quot;never\&quot;\n&quot;;
+#define Dynamic_Pigeon 0
+
+using i64 = std::int64_t;
+using u64 = std::uint64_t;
+using u32 = std::uint32_t;
+
+constexpr i64 MOD = i64(1e9) + 7;
+constexpr int INF = 1e9;
+constexpr i64 INF_LONG_LONG = 1e18;
+
+#define all(a) a.begin(), a.end()
+#define rall(a) a.rbegin(), a.rend()
+
+#define int i64
+
+struct node &#123;
+  std::array&lt;int, 27&gt; nxt;
+  std::array&lt;int, 27&gt; sum;
+  node() &#123;
+    std::fill(all(nxt), -1);
+    std::fill(all(sum), 0);
+  &#125;
+&#125;;
+
+int cnt[27][27];
+
+struct Trie &#123;
+  std::vector&lt;node&gt; nodes;
+  int root = 0;
+  Trie() &#123;
+    nodes.emplace_back();
   &#125;
 
-  // 在另一个文本中搜索 s
-  text = &quot;always say always&quot;;
-  result = std::search(text.begin(), text.end(), searcher);
-  if (result != text.end()) &#123;
-    std::cout &lt;&lt; &quot;The text contains the substring \&quot;never\&quot; at position &quot;
-              &lt;&lt; result - text.begin() &lt;&lt; &#39;\n&#39;;
-  &#125; else &#123;
-    std::cout &lt;&lt; &quot;The text does not contain the substring \&quot;never\&quot;\n&quot;;
+  void insert(const std::string &amp;s) &#123;
+    int cur = root;
+    for (char c : s) &#123;
+      if (nodes[cur].nxt[c - &#39;a&#39;] == -1) &#123;
+        nodes[cur].nxt[c - &#39;a&#39;] = nodes.size();
+        nodes.emplace_back();
+      &#125;
+      for (int i = 0; i &lt; 27; i++) &#123;
+        cnt[c - &#39;a&#39;][i] += nodes[cur].sum[i];
+      &#125;
+      nodes[cur].sum[c - &#39;a&#39;]++;
+      cur = nodes[cur].nxt[c - &#39;a&#39;];
+    &#125;
+  &#125;
+&#125;;
+
+void tizzytyt_SuKi() &#123;
+  int n, q;
+  std::cin &gt;&gt; n &gt;&gt; q;
+
+  Trie trie;
+
+  for (int i = 0; i &lt; n; i++) &#123;
+    std::string s;
+    std::cin &gt;&gt; s;
+    s.push_back(&#39;a&#39; + 26);
+    trie.insert(s);
   &#125;
 
-  return 0;
+  while (q--) &#123;
+    std::string s;
+    std::cin &gt;&gt; s;
+
+    s = (char)(&#39;a&#39; + 26) + s;
+
+    i64 ans = 0;
+
+    for (int i = 0; i &lt; 27 - 1; i++) &#123;
+      for (int j =  i + 1; j &lt; 27; j++) &#123;
+        ans += cnt[s[i] - &#39;a&#39;][s[j] - &#39;a&#39;];
+      &#125;
+    &#125;
+
+    std::cout &lt;&lt; ans &lt;&lt; &#39;\n&#39;;
+  &#125;
+&#125;
+
+signed main() &#123;
+#ifdef DYNAMIC_PIGEON
+  freopen(&quot;input.in&quot;, &quot;r&quot;, stdin);
+#else
+  std::cin.tie(0)-&gt;sync_with_stdio(0);
+#endif
+
+  tizzytyt_SuKi();
+
+  return Dynamic_Pigeon;
 &#125;
 </code></pre>
-<p>输出结果</p>
-<pre><code>The text contains the substring &quot;never&quot; at position 0
-The text does not contain the substring &quot;never&quot;
-</code></pre><h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/algorithm/search">cppreferrence.com</a></p>
 
         </div>
         <!-- .entry-content -->
@@ -453,23 +520,23 @@ The text does not contain the substring &quot;never&quot;
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
+        
           
-            <div class="post-nepre full previous">
+            <div class="post-nepre full next">
           
-            <a href="/2024/10/02/2022-ICPC-%E6%9D%AD%E5%B7%9E%E5%8C%BA%E5%9F%9F%E8%B5%9B-K-%E9%A2%98%E9%A2%98%E8%A7%A3/" rel="prev">
+            <a href="/2024/10/01/C-search-%E5%87%BD%E6%95%B0/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="http://cdnjson.com/images/2024/10/01/81197b85969320adbdf325c260404543.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="http://cdnjson.com/images/2024/10/01/81197b85969320adbdf325c260404543.png">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://s3.bmp.ovh/imgs/2024/10/01/d254935c80511b82.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://s3.bmp.ovh/imgs/2024/10/01/d254935c80511b82.png">
               </div>
               <span class="label">
-              Previous Post</span>
+              Next Post</span>
               <div class="info">
                 <h3>
-                2022 ICPC 杭州区域赛 K 题题解</h3>
+                C++ search 函数</h3>
                 <hr>
               </div>
             </a>
           </div>
-        
         
       </section>
       

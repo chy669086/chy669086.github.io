@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://chy669086.github.io/"/>
-  <updated>2024-10-01T07:52:50.638Z</updated>
+  <updated>2024-10-02T10:56:41.234Z</updated>
   <id>https://chy669086.github.io/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>2022 ICPC 杭州区域赛 K 题题解</title>
+    <link href="https://chy669086.github.io/2024/10/02/2022-ICPC-%E6%9D%AD%E5%B7%9E%E5%8C%BA%E5%9F%9F%E8%B5%9B-K-%E9%A2%98%E9%A2%98%E8%A7%A3/"/>
+    <id>https://chy669086.github.io/2024/10/02/2022-ICPC-杭州区域赛-K-题题解/</id>
+    <published>2024-10-02T09:01:08.000Z</published>
+    <updated>2024-10-02T10:56:41.234Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;2022-ICPC-杭州区域赛-K-题题解&quot;&gt;&lt;a href=&quot;#2022-ICPC-杭州区域赛-K-题题解&quot; class=&quot;headerlink&quot; title=&quot;2022 ICPC 杭州区域赛 K 题题解&quot;&gt;&lt;/a&gt;2022 ICPC 杭州区域赛 K
+        
+      
+    
+    </summary>
+    
+      <category term="题解" scheme="https://chy669086.github.io/categories/%E9%A2%98%E8%A7%A3/"/>
+    
+    
+      <category term="c++" scheme="https://chy669086.github.io/tags/c/"/>
+    
+      <category term="ICPC" scheme="https://chy669086.github.io/tags/ICPC/"/>
+    
+  </entry>
   
   <entry>
     <title>C++ search 函数</title>
