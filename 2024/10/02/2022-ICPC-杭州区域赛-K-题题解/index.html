@@ -335,7 +335,7 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h1 id="2022-ICPC-杭州区域赛-K-题题解"><a href="#2022-ICPC-杭州区域赛-K-题题解" class="headerlink" title="2022 ICPC 杭州区域赛 K 题题解"></a>2022 ICPC 杭州区域赛 K 题题解</h1><h2 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h2><p>给你 $n$ 个字符串，然后有 $q$ 次询问，每次询问给出一个字典序，请你输出在这个字典序下的逆序对个数。</p>
+          <h2 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h2><p>给你 $n$ 个字符串，然后有 $q$ 次询问，每次询问给出一个字典序，请你输出在这个字典序下的逆序对个数。</p>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>首先考虑暴力，每次询问可以 $O(|S|\log(n))$ 处理，显然会超时。</p>
 <p>考虑优化，注意到两个字符串比较出结果一定是在某个位置发生的（称这个比出大小的比较为<strong>决定性比较</strong>），这两个字符串一定有一个相同的前缀（长度可能是 0）。那么可以把问题转换成判断某个字符和其他字符发生了几次<strong>决定性</strong>的的比较，那么对于每次询问我们和 $O(26 \times 26)$ 处理。</p>
 <p>如何找到发生了几次决定性的比较呢，注意前面的一个性质，决定性比较之前的两个字符串一定是同前缀，这正好撞上了字典树的性质：相同前缀共用一条链。</p>
@@ -520,9 +520,26 @@ signed main() &#123;
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/2024/10/05/C-CRTR-%E7%AE%80%E4%BB%8B/" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="http://cdnjson.com/images/2024/10/05/image.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="http://cdnjson.com/images/2024/10/05/image.png">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                C++ CRTR 简介</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
         
           
-            <div class="post-nepre full next">
+            <div class="post-nepre half next">
           
             <a href="/2024/10/01/C-search-%E5%87%BD%E6%95%B0/" rel="next">
               <div class="background">

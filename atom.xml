@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://chy669086.github.io/"/>
-  <updated>2024-10-02T10:56:41.234Z</updated>
+  <updated>2024-10-05T14:12:59.337Z</updated>
   <id>https://chy669086.github.io/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>2022 ICPC 杭州区域赛 K 题题解</title>
-    <link href="https://chy669086.github.io/2024/10/02/2022-ICPC-%E6%9D%AD%E5%B7%9E%E5%8C%BA%E5%9F%9F%E8%B5%9B-K-%E9%A2%98%E9%A2%98%E8%A7%A3/"/>
-    <id>https://chy669086.github.io/2024/10/02/2022-ICPC-杭州区域赛-K-题题解/</id>
-    <published>2024-10-02T09:01:08.000Z</published>
-    <updated>2024-10-02T10:56:41.234Z</updated>
+    <title>C++ CRTR 简介</title>
+    <link href="https://chy669086.github.io/2024/10/05/C-CRTR-%E7%AE%80%E4%BB%8B/"/>
+    <id>https://chy669086.github.io/2024/10/05/C-CRTR-简介/</id>
+    <published>2024-10-05T14:08:24.000Z</published>
+    <updated>2024-10-05T14:12:59.337Z</updated>
     
     <summary type="html">
     
@@ -29,7 +29,34 @@
       
         
         
-          &lt;h1 id=&quot;2022-ICPC-杭州区域赛-K-题题解&quot;&gt;&lt;a href=&quot;#2022-ICPC-杭州区域赛-K-题题解&quot; class=&quot;headerlink&quot; title=&quot;2022 ICPC 杭州区域赛 K 题题解&quot;&gt;&lt;/a&gt;2022 ICPC 杭州区域赛 K
+          &lt;p&gt;最近看群友讨论到了“虚函数就是历史遗留问题，现在完全可以用 CRTR 代替”，好奇，就去搜索了什么是 CRTR，结果发现这么早的一个技术我现在才知道，真是落后时代 10 余年。&lt;/p&gt;
+&lt;h2 id=&quot;虚函数与动态链接&quot;&gt;&lt;a href=&quot;#虚函数与动态链接&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="https://chy669086.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="c++" scheme="https://chy669086.github.io/tags/c/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>2022 ICPC 杭州区域赛 K 题题解</title>
+    <link href="https://chy669086.github.io/2024/10/02/2022-ICPC-%E6%9D%AD%E5%B7%9E%E5%8C%BA%E5%9F%9F%E8%B5%9B-K-%E9%A2%98%E9%A2%98%E8%A7%A3/"/>
+    <id>https://chy669086.github.io/2024/10/02/2022-ICPC-杭州区域赛-K-题题解/</id>
+    <published>2024-10-02T09:01:08.000Z</published>
+    <updated>2024-10-05T14:08:41.749Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;题目大意&quot;&gt;&lt;a href=&quot;#题目大意&quot; class=&quot;headerlink&quot; title=&quot;题目大意&quot;&gt;&lt;/a&gt;题目大意&lt;/h2&gt;&lt;p&gt;给你 $n$ 个字符串，然后有 $q$
         
       
     
@@ -49,7 +76,7 @@
     <link href="https://chy669086.github.io/2024/10/01/C-search-%E5%87%BD%E6%95%B0/"/>
     <id>https://chy669086.github.io/2024/10/01/C-search-函数/</id>
     <published>2024-10-01T12:34:15.000Z</published>
-    <updated>2024-10-01T07:52:50.638Z</updated>
+    <updated>2024-10-05T14:08:45.325Z</updated>
     
     <summary type="html">
     
@@ -57,7 +84,7 @@
       
         
         
-          &lt;h1 id=&quot;C-search-函数&quot;&gt;&lt;a href=&quot;#C-search-函数&quot; class=&quot;headerlink&quot; title=&quot;C++ search 函数&quot;&gt;&lt;/a&gt;C++ search 函数&lt;/h1&gt;&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot;
+          &lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;p&gt;std::search 函数在 C++ 很早的版本就开始存在了，但是在 C++17
         
       
     
