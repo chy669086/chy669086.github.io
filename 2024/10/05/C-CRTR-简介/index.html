@@ -330,6 +330,12 @@
         </span>
         <span class="bull">
         ·</span>
+        发布时间
+        2024-10-5<span class="bull">
+        ·</span>
+
+        ·</span>
+        更新时间
         2024-10-5<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
@@ -396,7 +402,7 @@ int main() &#123;
 </ul>
 <p>运行上述程序，得到结果 <code>This is class Driver.</code> 说明我们成功进行了子类与父类的绑定，实打实的调用了子类的 <code>show()</code> 函数。</p>
 <h2 id="有什么用，怎么用"><a href="#有什么用，怎么用" class="headerlink" title="有什么用，怎么用"></a>有什么用，怎么用</h2><p>众所周知，多态一般需要类似 <code>std::vector&lt;Base*&gt;</code> 的形式，但是由于我们的基类是模板类，不能通过这种方式多态，不如说，没有多态，因为 <code>Animal&lt;Cat&gt;*</code> 和 <code>Animal&lt;Dog&gt;*</code> 是两个完全不同的指针。</p>
-<p><strong><em>那怎么办？</em></strong></p>
+<p><em><strong>那怎么办？</strong></em></p>
 <p>考虑到一次查表的开销不是特别大，虚函数带来的大量开销主要是多层继承带来的巨大链条带来的查询开销，继承链很短的话开销其实是在预期内的。</p>
 <p>那我们用一个模板基类继承一个普通基类，这个普通基类使用虚函数，但是模板基类使用静态绑定，派生类去继承这个模板基类，那么不论如何，我们都只需要查一次表就可以定位到对应的函数，大大降低了多次继承带来的开销。</p>
 <pre><code class="c++">class Animal &#123;
@@ -474,7 +480,7 @@ I&#39;m a cat.
           
             <div class="post-nepre half previous">
           
-            <a href="/2024/10/09/2024-%E7%A7%8B%E5%86%AC%E5%AD%A3%E5%BC%80%E6%BA%90%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AE%AD%E7%BB%83%E8%90%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev">
+            <a href="/2024/10/08/2024-%E7%A7%8B%E5%86%AC%E5%AD%A3%E5%BC%80%E6%BA%90%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AE%AD%E7%BB%83%E8%90%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev">
               <div class="background">
                 <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://s3.bmp.ovh/imgs/2024/10/08/14b0416bb5096fb3.jpeg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://s3.bmp.ovh/imgs/2024/10/08/14b0416bb5096fb3.jpeg">
               </div>
