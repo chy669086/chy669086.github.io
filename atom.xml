@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://chy669086.github.io/"/>
-  <updated>2024-10-09T13:07:47.000Z</updated>
+  <updated>2024-10-11T09:45:00.000Z</updated>
   <id>https://chy669086.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>.bashrc 向 .zshrc 迁移的小妙招</title>
+    <link href="https://chy669086.github.io/2024/10/11/bashrc-%E5%90%91-zshrc-%E8%BF%81%E7%A7%BB%E7%9A%84%E5%B0%8F%E5%A6%99%E6%8B%9B/"/>
+    <id>https://chy669086.github.io/2024/10/11/bashrc-向-zshrc-迁移的小妙招/</id>
+    <published>2024-10-11T09:45:00.000Z</published>
+    <updated>2024-10-11T09:45:00.000Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;昨天兴致突发安装了 zsh 并使用了 powerlevel10k 主题。有一说一 zsh 使用体验比 bash 好太多了，但是今天我发现了一个重大的问题：之前的所有配置都在 .bashrc，这些不会自动继承到 .zshrc，这可咋办？而且 zsh 和 bash
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="https://chy669086.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="linux" scheme="https://chy669086.github.io/tags/linux/"/>
+    
+      <category term="bash" scheme="https://chy669086.github.io/tags/bash/"/>
+    
+      <category term="zsh" scheme="https://chy669086.github.io/tags/zsh/"/>
+    
+  </entry>
   
   <entry>
     <title>2024 秋冬季开源操作系统训练营学习笔记</title>
