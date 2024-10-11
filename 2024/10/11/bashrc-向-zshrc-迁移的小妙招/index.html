@@ -357,13 +357,13 @@
 </code></pre>
 <p>一种方法是把所有配置文件都重新迁移到 .zshrc，<del>但是我懒</del>，所以我找到了些小妙招。</p>
 <p>发现在 bash 直接运行 zsh 会让 zsh 继承 bash 的所有环境变量，所以只要想办法让 zsh 启动的时候启动 bash 再用 bash 启动 zsh 就好了。</p>
-<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>一种方法是手动解决</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><h3 id="手动解决"><a href="#手动解决" class="headerlink" title="手动解决"></a>手动解决</h3><p>一种方法是手动解决</p>
 <pre><code class="shell"># 在 zsh 中执行
 exec bash
 # 在 bash 中执行
 exec zsh
 </code></pre>
-<p>另一种方法是改写 .zshrc 和 .bashrc。</p>
+<h3 id="改写配置文件"><a href="#改写配置文件" class="headerlink" title="改写配置文件"></a>改写配置文件</h3><p>另一种方法是改写 .zshrc 和 .bashrc。</p>
 <p>首先，我们在 .zshrc <strong>头部</strong>加入</p>
 <pre><code class="shell">if [[ -v __USE_ZSH ]]; then
   unset __USE_ZSH
@@ -380,7 +380,6 @@ fi
 fi
 </code></pre>
 <p>这两个命令大概就是：进入 zsh 先判断有没有 <code>__USE_ZSH</code> 这变量，有，就 unset 掉，否则创建 <code>__USE_ZSH=1</code> 然后进入 bash，bash 中如果发现 <code>__USE_ZSH==1</code>，就会进入 zsh，就很妙的把 bash 的环境变量偷过来了。</p>
-<p><strong>注意</strong>：这时候千万不要在 .zshrc 里面写 <code>source $HOME/.bashrc</code>，否则会死循环。</p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_49030008/article/details/137921205">https://blog.csdn.net/qq_49030008/article/details/137921205</a></p>
 
         </div>
