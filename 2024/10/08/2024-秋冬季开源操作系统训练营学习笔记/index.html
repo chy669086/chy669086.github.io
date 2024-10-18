@@ -336,7 +336,7 @@
 
         ·</span>
         更新时间
-        2024-10-12<span class="bull">
+        2024-10-18<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -351,6 +351,18 @@
         
         <div class="entry-content">
           <p>个人 Rust 开源训练营学习笔记（感觉更像日记），大概会隔一段时间更新一次</p>
+<h2 id="2024-10-18"><a href="#2024-10-18" class="headerlink" title="2024-10-18"></a>2024-10-18</h2><div class='collapse'>
+      <div class='collapse-ctrl collapse-cardtitle' onclick='collapseToggle(this)'><div class='collapse-hint-ico'>&gt</div><span class='collapse-hint-show'>展开</span><span class='collapse-hint-hide'>隐藏</span></div>
+      <div class='collapse-content'><div class='content-flex collapse-cardborder'><div style='width:100%'>
+          <p><em><strong>ch6 简直噩梦</strong></em></p>
+<p>感觉写的东西问题很大，也没有完全搞懂文件系统和内存系统，就是照葫芦画瓢，我的文件系统是有严重的泄露问题的，<del>但是不会改</del></p>
+<p>今天一口气写了很多垃圾代码，然后还包括一个死锁（同志们调函数的时候一定要注意这个函数要不要持有锁）。</p>
+<p>写好一个项目真是一门艺术。我 ch3 的代码在 ch4 ch5 ch6 分别重构了一遍，现在是我比较满意的一版。但是其他的我感觉写的就很怪，谁家结构体数据全部 pub 啊（）</p>
+<p>最近都没有去训练，都去写 os camp 了，现在只剩下最后一个要写代码的实验了，感觉晋级在望！感觉在这个训练营学到的真的很多，本来对操作系统只是一知半解，现在经过浅层的学习，了解到了很多以前只知道名词的概念，也对操作系统的数据组织形式有了更深的了解，同时也解开了以前对汇编的疑问。以前在想为什么汇编要有操作系统作为链接，一直以为汇编是和机器绑定的，是机器码。学习了之后才知道，原来系统中断是操作系统提供的，而且寻址也是被操作系统调整过的，操作系统调度了所有程序的运行，所有程序最终都是回归到操作系统中去的。</p>
+</div></div>
+      </div>
+  </div>
+
 <h2 id="2024-10-12"><a href="#2024-10-12" class="headerlink" title="2024-10-12"></a>2024-10-12</h2><div class='collapse'>
       <div class='collapse-ctrl collapse-cardtitle' onclick='collapseToggle(this)'><div class='collapse-hint-ico'>&gt</div><span class='collapse-hint-show'>展开</span><span class='collapse-hint-hide'>隐藏</span></div>
       <div class='collapse-content'><div class='content-flex collapse-cardborder'><div style='width:100%'>
@@ -504,36 +516,19 @@ impl Task {
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
+        
           
-            <div class="post-nepre half previous">
+            <div class="post-nepre full next">
           
-            <a href="/2024/10/11/bashrc-%E5%90%91-zshrc-%E8%BF%81%E7%A7%BB%E7%9A%84%E5%B0%8F%E5%A6%99%E6%8B%9B/" rel="prev">
+            <a href="/2024/10/11/bashrc-%E5%90%91-zshrc-%E8%BF%81%E7%A7%BB%E7%9A%84%E5%B0%8F%E5%A6%99%E6%8B%9B/" rel="next">
               <div class="background">
                 <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://s3.bmp.ovh/imgs/2024/10/11/5610094626aebd1d.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://s3.bmp.ovh/imgs/2024/10/11/5610094626aebd1d.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                .bashrc 向 .zshrc 迁移的小妙招</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
-        
-          
-            <div class="post-nepre half next">
-          
-            <a href="/2024/10/05/C-CRTR-%E7%AE%80%E4%BB%8B/" rel="next">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="http://cdnjson.com/images/2024/10/05/image.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="http://cdnjson.com/images/2024/10/05/image.png">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                C++ CRTR 简介</h3>
+                .bashrc 向 .zshrc 迁移的小妙招</h3>
                 <hr>
               </div>
             </a>
