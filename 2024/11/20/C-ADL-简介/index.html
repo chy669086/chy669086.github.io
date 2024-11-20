@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Tag: C++ | Dynamic_Pigeon</title>
+  <title itemprop="name">C++ ADL 简介 | Dynamic_Pigeon</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -308,171 +308,235 @@
   </div>
 </header>
 
-      
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
 <div class="pattern-center-blank"></div>
-<div class="pattern-center ">
-  <div class="pattern-attachment-img">
-    <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="C++.img" class="lazyload" onerror="imgError(this,3)" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://s3.bmp.ovh/imgs/2024/11/20/adcf194d90bbd779.png);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://s3.bmp.ovh/imgs/2024/11/20/adcf194d90bbd779.png">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      C++ ADL 简介</h1>
+      <p class="entry-census">
+        <span>
+          <a href="chy669086.github.io">
+            <img src="https://s3.bmp.ovh/imgs/2024/10/08/ca40e9bf152dbbf0.jpg">
+          </a>
+        </span>
+        <span>
+          <a href="chy669086.github.io">Dynamic_Pigeon</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        发布时间
+        2024-11-20
+
+        <span class="bull">
+        ·</span>
+        更新时间
+        2024-11-20<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
   </div>
-  <header class="pattern-header ">
-    <h1 class="cat-title">C++</h1>
-  </header>
-</div>
+
 <div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <p>前两天水群水到的，突然感觉开发了新大陆。</p>
+<h2 id="ADL-简介"><a href="#ADL-简介" class="headerlink" title="ADL 简介"></a>ADL 简介</h2><p>相信很多人应该都写过类似这样的代码</p>
+<pre><code class="C++">#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+
+int main() &#123;
+  std::vector&lt;int&gt; a&#123;1, 2, 3, 4&#125;;
+  sort(a.begin(), a.end());
+  return 0;
+&#125;
+</code></pre>
+<p>这里并没有 <code>using namespace std</code> 却可以不用显示指定 <code>std::sort</code> 来调用，应该不止我一个人在第一次写出这个并意识到的时候感到惊讶。</p>
+<p>更重要的是，以下代码会 <code>CE</code></p>
+<pre><code class="C++">#include &lt;algorithm&gt;
+
+int main() &#123;
+  int a[10]&#123;&#125;;
+  sort(a, a + 10);
+  return 0;
+&#125;
+</code></pre>
+<p><strong>难道是 <code>std::vector</code> 的问题？</strong></p>
+<p>没错，就是因为 <code>std::vector</code>！</p>
+<p><strong>接下来让我来正式介绍一下 ADL(argument-dependent lookup)！</strong></p>
+<p>实参依赖查找（ADL），又称 Koenig 查找，是一组对函数调用表达式（包括对重载运算符的隐式函数调用）中的无限定的函数名进行查找的规则。在通常无限定名字查找所考虑的作用域和命名空间之外，还会在它的各个实参的命名空间中查找这些函数。<a href="#reference1">[1]</a></p>
+<p>简单来说就是，在进行函数调用的时候，先会在当前作用域（名称空间）寻找定义，找不到就会在实参的命名空间中寻找定义，还找不到就会报错。</p>
+<p>在这些调用中，包含类自身，基类，外围类和最内层类的外层命名空间（当然，对于基础类型，如int之类其关联集为空）；如果类模板已经特化实参，则还增加对实参类的命名空间及以其为成员的类。</p>
+<div class="admonition note"><p class="admonition-title">注解
+</p><p>对于更多的细节，请查阅 <a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/adl">cppreference.com</a></p></div>
+
+<p>然后我们就可以写出这样的代码：</p>
+<pre><code class="C++">#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+
+class vec : public std::vector&lt;int&gt; &#123;
+ public:
+  vec() : std::vector&lt;int&gt;() &#123;&#125;
+  vec(std::initializer_list&lt;int&gt; il) : std::vector&lt;int&gt;(il) &#123;&#125;
+&#125;;
+
+int main() &#123;
+  vec a&#123;1, 2, 3, 4&#125;;
+  sort(a.begin(), a.end());
+  return 0;
+&#125;
+</code></pre>
+<p><code>sort</code> 调用的时候，发现当前没有定义，然后到实参定义域中找，没有找到，又去他的基类找，基类是 <code>std::vector&lt;int&gt;</code>，在 <code>std</code> 名称空间中，于是找到了 <code>std::sort</code> 进行调用。</p>
+<h2 id="ADL-的用途"><a href="#ADL-的用途" class="headerlink" title="ADL 的用途"></a>ADL 的用途</h2><p>通过前面的例子来看，这个东西好像除了增加阅读难度（完全不知道哪里来的函数）之外就没有用了，那么接下来举一个例子：</p>
+<pre><code class="C++">#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+ 
+namespace test &#123;
+class Demo &#123;
+public:
+  Demo(int a) : a(a) &#123;&#125;
+  int get() const &#123; return a; &#125;
+
+  friend std::ostream &amp;operator&lt;&lt;(std::ostream &amp;os, const Demo &amp;d) &#123;
+    os &lt;&lt; d.a;
+    return os;
+  &#125;
+private:
+  int a;
+&#125;;
+&#125;
+ 
+int main() &#123;
+  test::Demo d(114514);
+  std::cout &lt;&lt; d &lt;&lt; &#39;\n&#39;;
+  return 0;
+&#125;
+</code></pre>
+<p><code>std::cout &lt;&lt;</code> 调用的时候通过 ADL 找到了位于 <code>test</code> 名称空间的 <code>std::ostream &amp;operator&lt;&lt;(std::ostream &amp;os, const Demo &amp;d)</code>，大大的简化了代码。</p>
+<p>ADL 允许函数模板在不同名称空间定义，而不需要显示的指定作用域或者全局空间限定。</p>
+<p>再来看一个例子：</p>
+<pre><code class="C++">namespace N1 &#123;
+
+struct X &#123;&#125;;
+
+void f(X);
+
+&#125;
+
+namespace N2 &#123;
+
+void f(N1::X);
+
+&#125;
+
+void g() &#123;
+  N1::X x;
+  f(x); // 调用 N1::f
+  N2::f(x); // 调用 N2::f
+
+  using N2::f;
+  f(x); // 错误，Call to &#39;f&#39; is ambiguous，同时存在了 N1::f 和 N2::f
+&#125;
+</code></pre>
+<p>可以发现 <code>using</code> 的函数并不被当作当前作用域，而被当作了与 N1 同级的函数。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>ADL 是 C++ 的一个重要语法概念，不过带来便利的同时也带来的一些不确定性（万一调用调飞了就全毁了），不过这个和允许函数重载是一样的，好用与否，还是在于使用的人。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><span id="reference1"></span><br>[1] <a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/adl">https://zh.cppreference.com/w/cpp/language/adl</a> </p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="/images/donate/AliPayQR.png"></li>
+                <li class="wechat-code"><img src="/images/donate/WeChanQR.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2024/10/08/2024-%E7%A7%8B%E5%86%AC%E5%AD%A3%E5%BC%80%E6%BA%90%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AE%AD%E7%BB%83%E8%90%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://s3.bmp.ovh/imgs/2024/10/08/14b0416bb5096fb3.jpeg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://s3.bmp.ovh/imgs/2024/10/08/14b0416bb5096fb3.jpeg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                2024 秋冬季开源操作系统训练营学习笔记</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
+  <div id="vcomments"></div>
+  <script>
+    window.onload = function(){
+        var valine = new Valine();
+        valine.init({
+          el: '#vcomments',
+          appId: "UBcI72jTU9rI7JRLoMf8dDYW-MdYXbMMI",
+          appKey: "gTKs1SNQSmReQkqrp7NTzcTK",
+          path: window.location.pathname,
+          placeholder: "你是我一生只会遇见一次的惊喜 ...",
+          serverURLs: "https://ubci72jt.api.lncldglobal.com"
+        })
+    }
+  </script>
   
-    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2024/11/20/C-ADL-%E7%AE%80%E4%BB%8B/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
+  
+  
+  
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="chy669086.github.io" class="profile gravatar"><img src="https://s3.bmp.ovh/imgs/2024/10/08/ca40e9bf152dbbf0.jpg" itemprop="image" alt="Dynamic_Pigeon" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="chy669086.github.io" itemprop="url" rel="author">Dynamic_Pigeon</a>
+            </h3>
+          </div>
         </div>
-        <img width="150" height="150" src="https://s3.bmp.ovh/imgs/2024/11/20/adcf194d90bbd779.png" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2024/11/20/C-ADL-%E7%AE%80%E4%BB%8B/">
-    C++ ADL 简介</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-calendar">
-      </i>发表于2024-11-20 15:11
-      <br>
-      <i class="iconfont icon-time">
-      </i>更新于2024-11-20 15:11</div>
-    <p>
-    </p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2024/11/20/C-ADL-%E7%AE%80%E4%BB%8B/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2024/10/05/C-CRTR-%E7%AE%80%E4%BB%8B/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="http://cdnjson.com/images/2024/10/05/image.png" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2024/10/05/C-CRTR-%E7%AE%80%E4%BB%8B/">
-    C++ CRTR 简介</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-calendar">
-      </i>发表于2024-10-05 22:10
-      <br>
-      <i class="iconfont icon-time">
-      </i>更新于2024-10-05 22:10</div>
-    <p>
-    </p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2024/10/05/C-CRTR-%E7%AE%80%E4%BB%8B/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2024/10/02/2022-ICPC-%E6%9D%AD%E5%B7%9E%E5%8C%BA%E5%9F%9F%E8%B5%9B-K-%E9%A2%98%E9%A2%98%E8%A7%A3/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="http://cdnjson.com/images/2024/10/01/81197b85969320adbdf325c260404543.png" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2024/10/02/2022-ICPC-%E6%9D%AD%E5%B7%9E%E5%8C%BA%E5%9F%9F%E8%B5%9B-K-%E9%A2%98%E9%A2%98%E8%A7%A3/">
-    2022 ICPC 杭州区域赛 K 题题解</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-calendar">
-      </i>发表于2024-10-02 17:10
-      <br>
-      <i class="iconfont icon-time">
-      </i>更新于2024-10-02 17:10</div>
-    <p>
-    </p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2024/10/02/2022-ICPC-%E6%9D%AD%E5%B7%9E%E5%8C%BA%E5%9F%9F%E8%B5%9B-K-%E9%A2%98%E9%A2%98%E8%A7%A3/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2024/10/01/C-search-%E5%87%BD%E6%95%B0/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://s3.bmp.ovh/imgs/2024/10/01/d254935c80511b82.png" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2024/10/01/C-search-%E5%87%BD%E6%95%B0/">
-    C++ search 函数</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-calendar">
-      </i>发表于2024-10-01 20:10
-      <br>
-      <i class="iconfont icon-time">
-      </i>更新于2024-10-01 20:10</div>
-    <p>
-    </p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2024/10/01/C-search-%E5%87%BD%E6%95%B0/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-
-
-      <div class="clearer">
-      </div>
-    </main>
-    <!--  -->
-    
-  </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i>一个好奇的人</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
+
+
+
     </div>    
     <div class="ins-search">
     <div class="ins-search-mask"></div>

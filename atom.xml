@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://chy669086.github.io/"/>
-  <updated>2024-10-11T09:45:00.000Z</updated>
+  <updated>2024-11-20T07:49:21.000Z</updated>
   <id>https://chy669086.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>C++ ADL 简介</title>
+    <link href="https://chy669086.github.io/2024/11/20/C-ADL-%E7%AE%80%E4%BB%8B/"/>
+    <id>https://chy669086.github.io/2024/11/20/C-ADL-简介/</id>
+    <published>2024-11-20T07:49:21.000Z</published>
+    <updated>2024-11-20T07:49:21.000Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;前两天水群水到的，突然感觉开发了新大陆。&lt;/p&gt;
+&lt;h2 id=&quot;ADL-简介&quot;&gt;&lt;a href=&quot;#ADL-简介&quot; class=&quot;headerlink&quot; title=&quot;ADL 简介&quot;&gt;&lt;/a&gt;ADL
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="https://chy669086.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="C++" scheme="https://chy669086.github.io/tags/C/"/>
+    
+  </entry>
   
   <entry>
     <title>.bashrc 向 .zshrc 迁移的小妙招</title>
