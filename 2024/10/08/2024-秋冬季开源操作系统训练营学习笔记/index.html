@@ -336,7 +336,7 @@
         <span class="bull">
         ·</span>
         更新时间
-        2024-10-27<span class="bull">
+        2024-11-23<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -351,6 +351,19 @@
         
         <div class="entry-content">
           <p>个人 Rust 开源训练营学习笔记（感觉更像日记），大概会隔一段时间更新一次</p>
+<h2 id="2024-11-23"><a href="#2024-11-23" class="headerlink" title="2024-11-23"></a>2024-11-23</h2><div class='collapse'>
+      <div class='collapse-ctrl collapse-cardtitle' onclick='collapseToggle(this)'><div class='collapse-hint-ico'>&gt</div><span class='collapse-hint-show'>展开</span><span class='collapse-hint-hide'>隐藏</span></div>
+      <div class='collapse-content'><div class='content-flex collapse-cardborder'><div style='width:100%'>
+          <p><del>快一个月没有更新了</del></p>
+<p>今天又回去看了地址空间的知识。之前还是学的不扎实，昨天写阶段三的练习的时候又在想操作系统是怎么管理虚拟地址和物理地址的映射的。现在搞懂了，记录一下。</p>
+<p>risc-v 在开启 mmu 之后所有地址访问都是虚拟地址，操作系统为了管理所有的内存，在开启 mmu 之前，需要提前建立一个虚拟地址到物理地址的映射。在 arceos 中是建立了一个零偏移的的虚拟地址到物理地址的映射（才知道地址可以被重复映射），初始化映射表之后，就可以进入 mmu 模式，之后就可以启动应用程序进入用户态了。</p>
+<p>arceos 内核和应用用了两张页表，也就说每次 trap 的时候都需要刷一下 TLB 来保证地址访问正确。</p>
+<p>每个进程申请内存的时候，操作系统都会从剩余物理空间中找一些空间来映射，虚拟地址的连续不代表物理地址的连续，也就是跨页的数据在物理上不一定是连续的（感觉好色）。</p>
+<p>操作系统访问用户地址只需要找到用户的页表（前面整个内存都已经被操作系统映射了，所以操作系统可以访问所有的内存），并根据虚拟页表找到对应的物理页表，就可以直接访问（arceos 因为建立了零偏移的映射，所以不需要下一步转换，如果不是零偏移的转换需要再进行转换）。</p>
+</div></div>
+      </div>
+  </div>
+
 <h2 id="2024-10-27"><a href="#2024-10-27" class="headerlink" title="2024-10-27"></a>2024-10-27</h2><div class='collapse'>
       <div class='collapse-ctrl collapse-cardtitle' onclick='collapseToggle(this)'><div class='collapse-hint-ico'>&gt</div><span class='collapse-hint-show'>展开</span><span class='collapse-hint-hide'>隐藏</span></div>
       <div class='collapse-content'><div class='content-flex collapse-cardborder'><div style='width:100%'>
@@ -526,36 +539,19 @@ impl Task {
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
+        
           
-            <div class="post-nepre half previous">
+            <div class="post-nepre full next">
           
-            <a href="/2024/11/20/C-ADL-%E7%AE%80%E4%BB%8B/" rel="prev">
+            <a href="/2024/11/20/C-ADL-%E7%AE%80%E4%BB%8B/" rel="next">
               <div class="background">
                 <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://s3.bmp.ovh/imgs/2024/11/20/adcf194d90bbd779.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://s3.bmp.ovh/imgs/2024/11/20/adcf194d90bbd779.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                C++ ADL 简介</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
-        
-          
-            <div class="post-nepre half next">
-          
-            <a href="/2024/10/11/bashrc-%E5%90%91-zshrc-%E8%BF%81%E7%A7%BB%E7%9A%84%E5%B0%8F%E5%A6%99%E6%8B%9B/" rel="next">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://s3.bmp.ovh/imgs/2024/10/11/5610094626aebd1d.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://s3.bmp.ovh/imgs/2024/10/11/5610094626aebd1d.png">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                .bashrc 向 .zshrc 迁移的小妙招</h3>
+                C++ ADL 简介</h3>
                 <hr>
               </div>
             </a>
