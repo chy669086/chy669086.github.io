@@ -449,6 +449,21 @@ I&#39;m a cat.
 </code></pre>
 <p>不过写起来确实很麻烦，而且没有 override 带来的部分编译提示（字打错了跑哪里哭去），但是这样写我们同时赢得了多态和效率（同时代码量极致膨胀）。</p>
 <p><del>为什么有人还在用继承啊</del></p>
+<h2 id="2024-11-27-ADD"><a href="#2024-11-27-ADD" class="headerlink" title="2024-11-27 ADD"></a>2024-11-27 ADD</h2><p>C++23 带来了一个神奇的 <code>this auto &amp;&amp;self</code> 语法， CRTP 于是有了一个神奇的写法</p>
+<pre><code class="c++">#include &lt;cstdio&gt;
+
+struct Base &#123; void name(this auto &amp;&amp;self) &#123; self.impl(); &#125; &#125;;
+struct D1 : public Base &#123; void impl() &#123; std::puts(&quot;D1::impl()&quot;); &#125; &#125;;
+struct D2 : public Base &#123; void impl() &#123; std::puts(&quot;D2::impl()&quot;); &#125; &#125;;
+ 
+int main()
+&#123;
+    D1 d1; d1.name();
+    D2 d2; d2.name();
+&#125;
+</code></pre>
+<p>C++ 标准有点过于色琴了</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>[1] <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/language/crtp">https://en.cppreference.com/w/cpp/language/crtp</a></p>
 
         </div>
         <!-- .entry-content -->
