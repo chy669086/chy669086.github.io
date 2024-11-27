@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">C++ CRTR 简介 | Dynamic_Pigeon</title>
+  <title itemprop="name">C++ CRTP 简介 | Dynamic_Pigeon</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -318,7 +318,7 @@
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      C++ CRTR 简介</h1>
+      C++ CRTP 简介</h1>
       <p class="entry-census">
         <span>
           <a href="chy669086.github.io">
@@ -350,7 +350,7 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <p>最近看群友讨论到了“虚函数就是历史遗留问题，现在完全可以用 CRTR 代替”，好奇，就去搜索了什么是 CRTR，结果发现这么早的一个技术我现在才知道，真是落后时代 10 余年。</p>
+          <p>最近看群友讨论到了“虚函数就是历史遗留问题，现在完全可以用 CRTP 代替”，好奇，就去搜索了什么是 CRTP，结果发现这么早的一个技术我现在才知道，真是落后时代 10 余年。</p>
 <h2 id="虚函数与动态链接"><a href="#虚函数与动态链接" class="headerlink" title="虚函数与动态链接"></a>虚函数与动态链接</h2><p>C++ 的多态是通过虚函数实现的，虚函数的实质是在对象中开辟了一个空间来存储函数指针（虚函数表 <code>vtable</code>），调用这个函数是通过这个指针去访问，而不能在编译期确定。</p>
 <p>比如：</p>
 <pre><code class="c++">class Animal &#123;
@@ -372,7 +372,7 @@ int main() &#123;
 &#125;
 </code></pre>
 <p>调用 <code>p-&gt;jump()</code> 的时候，程序会去虚函数表寻找那个指针，在这个程序中最终会调用 <code>Cat::jump()</code>。</p>
-<p>但是查表终究是有代价的，有没有兼顾多态和效率的做法呢，于是，CRTR(Curiously Recurring Template Pattern) 应运而生。</p>
+<p>但是查表终究是有代价的，有没有兼顾多态和效率的做法呢，于是，CRTP(Curiously Recurring Template Pattern) 应运而生。</p>
 <h2 id="通过模板实现静态绑定"><a href="#通过模板实现静态绑定" class="headerlink" title="通过模板实现静态绑定"></a>通过模板实现静态绑定</h2><p>首先复习一个概念，C++ 的模板是编译期多态，是<strong>零成本抽象</strong>。我们在子类和父类中定义同一个函数，但是不声明为虚函数，通过编译期多态来实现绑定。</p>
 <pre><code class="c++">template &lt;typename T&gt;
 class Base &#123;
@@ -412,21 +412,21 @@ public:
 &#125;;
 
 template &lt;typename T&gt;
-class Animal_CRTR : public Animal &#123;
+class Animal_CRTP : public Animal &#123;
 public:
   void say() const override &#123;
     static_cast&lt;const T*&gt;(this)-&gt;say();
   &#125;
 &#125;;
 
-class Cat : public Animal_CRTR&lt;Cat&gt; &#123;
+class Cat : public Animal_CRTP&lt;Cat&gt; &#123;
 public:
   void say() const &#123;
     std::cout &lt;&lt; &quot;I&#39;m a cat.\n&quot;;
   &#125;
 &#125;;
 
-class Dog : public Animal_CRTR&lt;Dog&gt; &#123;
+class Dog : public Animal_CRTP&lt;Dog&gt; &#123;
 public:
   void say() const &#123;
     std::cout &lt;&lt; &quot;I&#39;m a dog.\n&quot;;
