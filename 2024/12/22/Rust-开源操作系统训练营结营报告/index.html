@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Tag: 2024 秋冬季开源操作系统训练营 | Dynamic_Pigeon</title>
+  <title itemprop="name">Rust 开源操作系统训练营结营报告 | Dynamic_Pigeon</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -315,66 +315,153 @@
   </div>
 </header>
 
-      
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
 <div class="pattern-center-blank"></div>
-<div class="pattern-center ">
-  <div class="pattern-attachment-img">
-    <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="2024 秋冬季开源操作系统训练营.img" class="lazyload" onerror="imgError(this,3)" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://s3.bmp.ovh/imgs/2024/12/22/55c114ce92c675d9.png);" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://s3.bmp.ovh/imgs/2024/12/22/55c114ce92c675d9.png">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      Rust 开源操作系统训练营结营报告</h1>
+      <p class="entry-census">
+        <span>
+          <a href="chy669086.github.io">
+            <img src="https://s3.bmp.ovh/imgs/2024/10/08/ca40e9bf152dbbf0.jpg">
+          </a>
+        </span>
+        <span>
+          <a href="chy669086.github.io">Dynamic_Pigeon</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        发布时间
+        2024-12-22
+
+        <span class="bull">
+        ·</span>
+        更新时间
+        2024-12-22<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
   </div>
-  <header class="pattern-header ">
-    <h1 class="cat-title">2024 秋冬季开源操作系统训练营</h1>
-  </header>
-</div>
+
 <div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-      
-  <!-- 首页默认取最最新文章集 -->
-  
-    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2024/10/08/2024-%E7%A7%8B%E5%86%AC%E5%AD%A3%E5%BC%80%E6%BA%90%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AE%AD%E7%BB%83%E8%90%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <p>仓库链接：<a target="_blank" rel="noopener" href="https://github.com/chy669086/futex">https://github.com/chy669086/futex</a></p>
+<p>参与方向：宏内核，posix 接口相关。</p>
+<p>我在四阶段中编写的是 futex 有关的代码。</p>
+<h2 id="设计思路"><a href="#设计思路" class="headerlink" title="设计思路"></a>设计思路</h2><p>暂时请求了五个 os 需要实现的接口，分别是</p>
+<ul>
+<li><code>sched_yield</code> 退出当前的任务，不放回调度队列。</li>
+<li><code>translate_vaddr</code> 将当前任务的虚拟地址转换成操作系统可以访问的地址</li>
+<li><code>current_task</code> 取得当前任务</li>
+<li><code>current_prosess_id</code> 取得进程 id</li>
+<li><code>wake</code> 传入一个 <code>FutexQ</code> 类型，唤醒任务（提供了 <code>get_task</code> 函数取得任务）</li>
+</ul>
+<p><code>FutexQ</code> 是存放任务的重要类型，内有 <code>key</code> <code>bitset</code> <code>task</code> 三个字段，其中 <code>key</code> 和 <code>bitset</code> 是用来唤醒任务的重要字段。</p>
+<p><code>FutexKey</code> 是一个枚举，现在只实现了一个 <code>Private</code>，<code>Shared</code> 暂时没有开发的思路。</p>
+<p>任务等待队列存储在 <code>FutexQueues</code> 中，通过一个 <code>futex</code> 的唯一 key 通过哈希变换后放入或唤醒。</p>
+<p>现在实现的调用有：<code>FUTEX_WAIT</code> <code>FUTEX_WAKE</code> <code>FUTEX_REQUEUE</code> <code>FUTEX_CMP_REQUEUE</code> <code>FUTEX_WAKE_OP</code> 以及对应的 bitset 版本</p>
+<p>因为三阶段提供的宏内核中没有合适的线程实现，二阶短的项目不知道什么原因不能编译 <code>link-me</code> 的代码，所以我直接把整个模块删除 <code>linkme</code> 后移植到了阶段二的仓库，并编写测试通过。</p>
+<h2 id="收获"><a href="#收获" class="headerlink" title="收获"></a>收获</h2><p>说实话还是不是很擅长编写 no_std 的代码，所以我还是依赖了很多外部库。</p>
+<p>虽然没有通过最初的设想去适配到任何一个系统里去（直接移植还是太不松耦合了），但是我也花了很多时间去尝试适配，其中阶段二的项目仓库是最接近完成的一个，结果编译错误了，经过测试发现把 <code>futex::syscall::sys_futex</code> 函数调用去掉就可以通过编译，一时间不知道从何改起。转到 <code>arceos</code> 适配的时候，在被迫阅读了大量源码之后，发现提供的宏内核示例压根没有创建线程的系统调用，自己写了半天并没有写出来，所以又放弃了。</p>
+<p>虽然写的挺差的，而且最近也到学校的期末周了，确实有没有太多时间写这个项目了，但是通过这次 posix 接口的编写，我还是学会了不少东西。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从训练营开始到现在也过去 12 周了，看着自己从对操作系统毫无概念一步步到现在还是很感慨的。感谢老师的辛勤付出，感谢训练营能给我一个这样的平台。</p>
+
         </div>
-        <img width="150" height="150" src="https://s3.bmp.ovh/imgs/2024/10/08/14b0416bb5096fb3.jpeg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2024/10/08/2024-%E7%A7%8B%E5%86%AC%E5%AD%A3%E5%BC%80%E6%BA%90%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AE%AD%E7%BB%83%E8%90%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
-    2024 秋冬季开源操作系统训练营学习笔记</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-calendar">
-      </i>发表于2024-10-08 21:10
-      <br>
-      <i class="iconfont icon-time">
-      </i>更新于2024-12-22 19:12</div>
-    <p>
-    个人学习笔记</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2024/10/08/2024-%E7%A7%8B%E5%86%AC%E5%AD%A3%E5%BC%80%E6%BA%90%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AE%AD%E7%BB%83%E8%90%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="/images/donate/AliPayQR.png"></li>
+                <li class="wechat-code"><img src="/images/donate/WeChanQR.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/2024/10/08/2024-%E7%A7%8B%E5%86%AC%E5%AD%A3%E5%BC%80%E6%BA%90%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AE%AD%E7%BB%83%E8%90%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://s3.bmp.ovh/imgs/2024/10/08/14b0416bb5096fb3.jpeg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://s3.bmp.ovh/imgs/2024/10/08/14b0416bb5096fb3.jpeg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                2024 秋冬季开源操作系统训练营学习笔记</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+  <div id="vcomments"></div>
+  <script>
+    window.onload = function(){
+        var valine = new Valine();
+        valine.init({
+          el: '#vcomments',
+          appId: "UBcI72jTU9rI7JRLoMf8dDYW-MdYXbMMI",
+          appKey: "gTKs1SNQSmReQkqrp7NTzcTK",
+          path: window.location.pathname,
+          placeholder: "你是我一生只会遇见一次的惊喜 ...",
+          serverURLs: "https://ubci72jt.api.lncldglobal.com"
+        })
+    }
+  </script>
   
-
-
-      <div class="clearer">
-      </div>
-    </main>
-    <!--  -->
-    
-  </div>
+  
+  
+  
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="chy669086.github.io" class="profile gravatar"><img src="https://s3.bmp.ovh/imgs/2024/10/08/ca40e9bf152dbbf0.jpg" itemprop="image" alt="Dynamic_Pigeon" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="chy669086.github.io" itemprop="url" rel="author">Dynamic_Pigeon</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i>一个好奇的人</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
+
+
+
     </div>    
     <div class="ins-search">
     <div class="ins-search-mask"></div>
